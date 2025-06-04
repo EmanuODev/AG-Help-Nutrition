@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class FoodController extends Controller
@@ -2059,9 +2061,195 @@ class FoodController extends Controller
     }
 
     public function getFoods(){
-        return response()->json(['message' => 'Foods searched succefully', 'foods' => (DB::table('view_foods')->get()->toArray())], 200);
+        return response()->json(['message' => 'Foods searched succefully', 'foods' => (Food::get()->toArray())], 200);
     }
 
+    public function algoritmoGenetico(){
+
+        $array_sort = Arr::shuffle(Food::get()->toArray());
+        
+        $new_array = Arr::take($array_sort, 100);
+
+        $individuals = array_chunk($new_array, 5);
+
+        dd(["individuals" => $individuals]);
+
+    }
+
+    public function fitnessCalc($weights, $individuals) {
     
+        $medias_ponderadas = new Collection([]);
+
+        foreach($individuals as $gene) {
+
+            $media_ponderada = 
+
+                ($gene['Energia_kcal'] * $weights['Energia_kcal'] +
+                $gene['Proteina_g'] * $weights['Proteina_g'] +
+                $gene['Lipidios_totais_g'] * $weights['Lipidios_totais_g'] +
+                $gene['Carboi_drato_g'] * $weights['Carboi_drato_g'] +
+                $gene['Fibra_alimentar_total_g'] * $weights['Fibra_alimentar_total_g'] +
+                $gene['Coles_terol_mg'] * $weights['Coles_terol_mg'] +
+                $gene['AG_Satura_dos_g'] * $weights['AG_Satura_dos_g'] +
+                $gene['AG_Mono_g'] * $weights['AG_Mono_g'] +
+                $gene['AG_Poli_g'] * $weights['AG_Poli_g'] +
+                $gene['AG_Lino_leico_g'] * $weights['AG_Lino_leico_g'] +
+                $gene['AG_Linole_nico_g'] * $weights['AG_Linole_nico_g'] +
+                $gene['AG_Trans_total_g'] * $weights['AG_Trans_total_g'] +
+                $gene['Acucar_total_g'] * $weights['Acucar_total_g'] +
+                $gene['Acucar_de_adicacao_g'] * $weights['Acucar_de_adicacao_g'] +
+                $gene['Calcio_mg'] * $weights['Calcio_mg'] +
+                $gene['Mag_nesio_mg'] * $weights['Mag_nesio_mg'] +
+                $gene['Man_ganes_mg'] * $weights['Man_ganes_mg'] +
+                $gene['Fosforo_mg'] * $weights['Fosforo_mg'] +
+                $gene['Ferro_mg'] * $weights['Ferro_mg'] +
+                $gene['Sodio_mg'] * $weights['Sodio_mg'] +
+                $gene['Sodio_de_adicao_mg'] * $weights['Sodio_de_adicao_mg'] +
+                $gene['Potas_sio_mg'] * $weights['Potas_sio_mg'] +
+                $gene['Co_bre_mg'] * $weights['Co_bre_mg'] +
+                $gene['Zinco_mg'] * $weights['Zinco_mg'] +
+                $gene['Sele_nio_mcg'] * $weights['Sele_nio_mcg'] +
+                $gene['Reti_nol_mcg'] * $weights['Reti_nol_mcg'] +
+                $gene['Vitami_na_A_RAE_mcg'] * $weights['Vitami_na_A_RAE_mcg'] +
+                $gene['Tiami_na_mg'] * $weights['Tiami_na_mg'] +
+                $gene['Ribofla_vina_mg'] * $weights['Ribofla_vina_mg'] +
+                $gene['Niaci_na_mg'] * $weights['Niaci_na_mg'] +
+                $gene['Niaci_na_NE_mg'] * $weights['Niaci_na_NE_mg'] +
+                $gene['Pirido_xina_mg'] * $weights['Pirido_xina_mg'] +
+                $gene['Coba_lami_na_mcg'] * $weights['Coba_lami_na_mcg'] +
+                $gene['Folato_DFE_mcg'] * $weights['Folato_DFE_mcg'] +
+                $gene['Vitami_na_D_mcg'] * $weights['Vitami_na_D_mcg'] +
+                $gene['Vitami_na_E_mg'] * $weights['Vitami_na_E_mg'] +
+                $gene['Vitami_na_C_mg'] * $weights['Vitami_na_C_mg']) 
+                
+                /
+                
+                ($weights['Energia_kcal'] +
+                $weights['Proteina_g'] +
+                $weights['Lipidios_totais_g'] +
+                $weights['Carboi_drato_g'] +
+                $weights['Fibra_alimentar_total_g'] +
+                $weights['Coles_terol_mg'] +
+                $weights['AG_Satura_dos_g'] +
+                $weights['AG_Mono_g'] +
+                $weights['AG_Poli_g'] +
+                $weights['AG_Lino_leico_g'] +
+                $weights['AG_Linole_nico_g'] +
+                $weights['AG_Trans_total_g'] +
+                $weights['Acucar_total_g'] +
+                $weights['Acucar_de_adicacao_g'] +
+                $weights['Calcio_mg'] +
+                $weights['Mag_nesio_mg'] +
+                $weights['Man_ganes_mg'] +
+                $weights['Fosforo_mg'] +
+                $weights['Ferro_mg'] +
+                $weights['Sodio_mg'] +
+                $weights['Sodio_de_adicao_mg'] +
+                $weights['Potas_sio_mg'] +
+                $weights['Co_bre_mg'] +
+                $weights['Zinco_mg'] +
+                $weights['Sele_nio_mcg'] +
+                $weights['Reti_nol_mcg'] +
+                $weights['Vitami_na_A_RAE_mcg'] +
+                $weights['Tiami_na_mg'] +
+                $weights['Ribofla_vina_mg'] +
+                $weights['Niaci_na_mg'] +
+                $weights['Niaci_na_NE_mg'] +
+                $weights['Pirido_xina_mg'] +
+                $weights['Coba_lami_na_mcg'] +
+                $weights['Folato_DFE_mcg'] +
+                $weights['Vitami_na_D_mcg'] +
+                $weights['Vitami_na_E_mg'] +
+                $weights['Vitami_na_C_mg'])
+                ;
+            
+            $medias_ponderadas->push($media_ponderada);
+
+        }
+        
+        return $medias_ponderadas->avg();
+    }
+
+    public function fitness($sickness_type, $individuals) {
+
+        switch ($sickness_type) {
+
+            case 1: // Diabettes
+
+                $diabetes = [
+
+                    'Energia_kcal' => 3,
+                    'Proteina_g' => 1,
+                    'Lipidios_totais_g' => 2,
+                    'Carboi_drato_g' => 5,
+                    'Fibra_alimentar_total_g' => 1,
+                    'Coles_terol_mg' => 1,
+                    'AG_Satura_dos_g' => 2,
+                    'AG_Mono_g' => 1,
+                    'AG_Poli_g' => 1,
+                    'AG_Lino_leico_g' => 1,
+                    'AG_Linole_nico_g' => 1,
+                    'AG_Trans_total_g' => 3,
+                    'Acucar_total_g' => 5,
+                    'Acucar_de_adicacao_g' => 5,
+                    'Calcio_mg' => 1,
+                    'Mag_nesio_mg' => 1,
+                    'Man_ganes_mg' => 1,
+                    'Fosforo_mg' => 1,
+                    'Ferro_mg' => 1,
+                    'Sodio_mg' => 2,
+                    'Sodio_de_adicao_mg' => 2,
+                    'Potas_sio_mg' => 1,
+                    'Co_bre_mg' => 1,
+                    'Zinco_mg' => 1,
+                    'Sele_nio_mcg' => 1,
+                    'Reti_nol_mcg' => 1,
+                    'Vitami_na_A_RAE_mcg' => 1,
+                    'Tiami_na_mg' => 1,
+                    'Ribofla_vina_mg' => 1,
+                    'Niaci_na_mg' => 1,
+                    'Niaci_na_NE_mg' => 1,
+                    'Pirido_xina_mg' => 1,
+                    'Coba_lami_na_mcg' => 1,
+                    'Folato_DFE_mcg' => 1,
+                    'Vitami_na_D_mcg' => 1,
+                    'Vitami_na_E_mg' => 1,
+                    'Vitami_na_C_mg' => 1,
+
+                ];
+
+                return app(FoodController::class)->fitnessCalc($diabetes, $individuals);
+
+            case 2:
+            
+            break;
+
+            case 3;
+            
+            break;
+
+            case 4:
+            
+            break;
+
+            case 5:
+            
+            break;
+
+            case 6:
+            
+            break;
+
+            case 7:
+            
+            break;
+
+        
+        };
+
+
+
+
+    }
 
 }
