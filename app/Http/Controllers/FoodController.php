@@ -2064,29 +2064,6 @@ class FoodController extends Controller
         return response()->json(['message' => 'Foods searched succefully', 'foods' => (Food::get()->toArray())], 200);
     }
 
-    public function algoritmoGenetico($sickness_type){
-
-        $array_sort = Arr::shuffle(Food::get()->toArray());
-        
-        $new_array = Arr::take($array_sort, 100);
-
-        $individuals = array_chunk($new_array, 5);
-
-        $data = new Collection([]);
-
-        foreach($individuals as $individual) {
-
-            $data->push([
-                "individual" => $individual,
-                "fitness" => app(FoodController::class)->fitness($sickness_type, $individual), 
-            ]);
-
-        }
-
-        dump($data->all());
-
-    }
-
     public function fitnessCalc($weights, $individuals) {
     
         $medias_ponderadas = new Collection([]);
@@ -2181,7 +2158,7 @@ class FoodController extends Controller
         return $medias_ponderadas->avg();
     }
 
-    public function fitness($sickness_type, $individuals) {
+    public function fitness($sickness_type, $individual) {
 
         switch ($sickness_type) {
 
@@ -2229,7 +2206,7 @@ class FoodController extends Controller
 
                 ];
 
-                return app(FoodController::class)->fitnessCalc($diabetes, $individuals);
+                return app(FoodController::class)->fitnessCalc($diabetes, $individual);
 
             case 2:
 
@@ -2273,7 +2250,7 @@ class FoodController extends Controller
                     'Vitami_na_C_mg' => 1
                 ];
 
-                return app(FoodController::class)->fitnessCalc($cardiovascular, $individuals);
+                return app(FoodController::class)->fitnessCalc($cardiovascular, $individual);
 
             case 3;
             
@@ -2317,7 +2294,7 @@ class FoodController extends Controller
                     'Vitami_na_C_mg' => 1,
                 ];
 
-                return app(FoodController::class)->fitnessCalc($hipertensao, $individuals);
+                return app(FoodController::class)->fitnessCalc($hipertensao, $individual);
 
             case 4:
             
@@ -2361,7 +2338,7 @@ class FoodController extends Controller
                     'Vitami_na_C_mg' => 2
                 ];
 
-                return app(FoodController::class)->fitnessCalc($osteoporose, $individuals);
+                return app(FoodController::class)->fitnessCalc($osteoporose, $individual);
 
             case 5:
 
@@ -2405,7 +2382,7 @@ class FoodController extends Controller
                     'Vitami_na_C_mg' => 1
                 ];
             
-                return app(FoodController::class)->fitnessCalc($obesidade, $individuals);
+                return app(FoodController::class)->fitnessCalc($obesidade, $individual);
 
             case 6:
 
@@ -2449,7 +2426,7 @@ class FoodController extends Controller
                     'Vitami_na_C_mg' => 1
                 ];
             
-                return app(FoodController::class)->fitnessCalc($anemia, $individuals);
+                return app(FoodController::class)->fitnessCalc($anemia, $individual);
 
             case 7:
             
@@ -2493,12 +2470,106 @@ class FoodController extends Controller
                     'Vitami_na_C_mg' => 2
                 ];
 
-                return app(FoodController::class)->fitnessCalc($disturbios_gastrointestinais, $individuals);
+                return app(FoodController::class)->fitnessCalc($disturbios_gastrointestinais, $individual);
         
         };
 
+    }
 
+    public function getDoença($sickness_type){
 
+        switch ($sickness_type) {
+
+            case 1:
+                return "Diabetes";
+
+            case 2:
+                return "Doenças Cardiovasculares";
+            
+            case 3:
+                return "Hipertensão";
+
+            case 4:
+                return "Osteoporose";
+
+            case 5:
+                return "Obesidade";
+
+            case 6:
+                return "Anemia";
+
+            case 7:
+                return "Distúrbios Gastrointestinais";
+
+        }
+
+    }
+
+    public function cruzamento($cromossomo1, $cromossomo2, $sickness_type) {
+
+        $menor = $cromossomo1["fitness"] <= $cromossomo2["fitness"] ? $cromossomo1 : $cromossomo2;
+        $maior = $cromossomo1["fitness"] > $cromossomo2["fitness"] ? $cromossomo1 : $cromossomo2;
+
+        $cromossomo3 = new Collection([]);
+
+        for ($i = 0; $i < count($cromossomo1["individual"]) && $i < count($cromossomo2["individual"]); $i++) { 
+            
+            $random = Arr::random([0, 1]);
+        
+            $random == 0 ? $cromossomo3->push($cromossomo1["individual"][$i]) : $cromossomo3->push($cromossomo2["individual"][$i]);
+
+        }
+
+        $cromossomo3 = ["individual" => $cromossomo3, "fitness" => app(FoodController::class)->fitness($sickness_type, $cromossomo3)];
+
+        if($cromossomo3["fitness"] < $maior["fitness"])
+            return ["cromossomo1" => $menor, "cromossomo2" => $cromossomo3];
+
+        return  ["cromossomo1" => $menor, "cromossomo2" => $maior];
+
+    }
+
+    public function algoritmoGenetico($sickness_type){
+
+        $FoodController = new FoodController();
+
+        $array_sort = Arr::shuffle(Food::get()->toArray());
+        
+        $new_array = Arr::take($array_sort, 100);
+
+        $individuals = array_chunk($new_array, 5);
+
+        $data = new Collection([]);
+
+        foreach($individuals as $individual) {
+
+            $data->push([
+                "individual" => $individual,
+                "fitness" => $FoodController->fitness($sickness_type, $individual), 
+            ]);
+
+        }
+
+        $individuals = $data->all();
+
+        for ($count = 0; $count < 300; $count++) {
+
+            $indices = Arr::random([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], 2);
+    
+            $response = $FoodController->cruzamento($individuals[$indices[0]], $individuals[$indices[1]], $sickness_type);
+
+            $individuals[$indices[0]] = $response["cromossomo1"];
+            $individuals[$indices[1]] = $response["cromossomo2"];
+
+        }
+
+        $individuals = new Collection($individuals);
+
+        $min_cromossomo = $individuals->sortBy('fitness')->first();
+
+        $descricoes = $min_cromossomo['individual']->pluck('descricacao_do_alimento')->all();
+
+        return response()->json(["Doença" => $FoodController->getDoença($sickness_type), "Cromossomo" => $min_cromossomo['individual'], "Fitness" => $min_cromossomo['fitness'], "Alimentos recomendados" => $descricoes], 200);
 
     }
 
