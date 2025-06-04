@@ -2221,29 +2221,268 @@ class FoodController extends Controller
                 return app(FoodController::class)->fitnessCalc($diabetes, $individuals);
 
             case 2:
-            
-            break;
+
+                $cardiovascular = [
+                    'Energia_kcal' => 3,
+                    'Proteina_g' => 2,
+                    'Lipidios_totais_g' => 5,
+                    'Carboi_drato_g' => 3,
+                    'Fibra_alimentar_total_g' => 1,
+                    'Coles_terol_mg' => 5,
+                    'AG_Satura_dos_g' => 5,
+                    'AG_Mono_g' => 2,
+                    'AG_Poli_g' => 2,
+                    'AG_Lino_leico_g' => 2,
+                    'AG_Linole_nico_g' => 2,
+                    'AG_Trans_total_g' => 5,
+                    'Acucar_total_g' => 2,
+                    'Acucar_de_adicacao_g' => 3,
+                    'Calcio_mg' => 1,
+                    'Mag_nesio_mg' => 1,
+                    'Man_ganes_mg' => 1,
+                    'Fosforo_mg' => 1,
+                    'Ferro_mg' => 1,
+                    'Sodio_mg' => 2,
+                    'Sodio_de_adicao_mg' => 2,
+                    'Potas_sio_mg' => 1,
+                    'Co_bre_mg' => 1,
+                    'Zinco_mg' => 1,
+                    'Sele_nio_mcg' => 1,
+                    'Reti_nol_mcg' => 1,
+                    'Vitami_na_A_RAE_mcg' => 1,
+                    'Tiami_na_mg' => 1,
+                    'Ribofla_vina_mg' => 1,
+                    'Niaci_na_mg' => 1,
+                    'Niaci_na_NE_mg' => 1,
+                    'Pirido_xina_mg' => 1,
+                    'Coba_lami_na_mcg' => 1,
+                    'Folato_DFE_mcg' => 1,
+                    'Vitami_na_D_mcg' => 1,
+                    'Vitami_na_E_mg' => 1,
+                    'Vitami_na_C_mg' => 1
+                ];
+
+                return app(FoodController::class)->fitnessCalc($cardiovascular, $individuals);
 
             case 3;
             
-            break;
+                $hipertensao = [
+                    'Energia_kcal' => 1,
+                    'Proteina_g' => 1,
+                    'Lipidios_totais_g' => 2,
+                    'Carboi_drato_g' => 1,
+                    'Fibra_alimentar_total_g' => 1,
+                    'Coles_terol_mg' => 2,
+                    'AG_Satura_dos_g' => 2,
+                    'AG_Mono_g' => 1,
+                    'AG_Poli_g' => 1,
+                    'AG_Lino_leico_g' => 1,
+                    'AG_Linole_nico_g' => 1,
+                    'AG_Trans_total_g' => 2,
+                    'Acucar_total_g' => 1,
+                    'Acucar_de_adicacao_g' => 1,
+                    'Calcio_mg' => 1,
+                    'Mag_nesio_mg' => 1,
+                    'Man_ganes_mg' => 1,
+                    'Fosforo_mg' => 1,
+                    'Ferro_mg' => 1,
+                    'Sodio_mg' => 5,
+                    'Sodio_de_adicao_mg' => 5,
+                    'Potas_sio_mg' => 3,
+                    'Co_bre_mg' => 1,
+                    'Zinco_mg' => 1,
+                    'Sele_nio_mcg' => 1,
+                    'Reti_nol_mcg' => 1,
+                    'Vitami_na_A_RAE_mcg' => 1,
+                    'Tiami_na_mg' => 1,
+                    'Ribofla_vina_mg' => 1,
+                    'Niaci_na_mg' => 1,
+                    'Niaci_na_NE_mg' => 1,
+                    'Pirido_xina_mg' => 1,
+                    'Coba_lami_na_mcg' => 1,
+                    'Folato_DFE_mcg' => 1,
+                    'Vitami_na_D_mcg' => 1,
+                    'Vitami_na_E_mg' => 1,
+                    'Vitami_na_C_mg' => 1,
+                ];
+
+                return app(FoodController::class)->fitnessCalc($hipertensao, $individuals);
 
             case 4:
             
-            break;
+                $osteoporose = [
+                    'Energia_kcal' => 1,
+                    'Proteina_g' => 2,
+                    'Lipidios_totais_g' => 1,
+                    'Carboi_drato_g' => 1,
+                    'Fibra_alimentar_total_g' => 1,
+                    'Coles_terol_mg' => 1,
+                    'AG_Satura_dos_g' => 1,
+                    'AG_Mono_g' => 1,
+                    'AG_Poli_g' => 1,
+                    'AG_Lino_leico_g' => 1,
+                    'AG_Linole_nico_g' => 1,
+                    'AG_Trans_total_g' => 1,
+                    'Acucar_total_g' => 1,
+                    'Acucar_de_adicacao_g' => 1,
+                    'Calcio_mg' => 5,
+                    'Mag_nesio_mg' => 2,
+                    'Man_ganes_mg' => 2,
+                    'Fosforo_mg' => 4,
+                    'Ferro_mg' => 2,
+                    'Sodio_mg' => 1,
+                    'Sodio_de_adicao_mg' => 1,
+                    'Potas_sio_mg' => 2,
+                    'Co_bre_mg' => 2,
+                    'Zinco_mg' => 2,
+                    'Sele_nio_mcg' => 2,
+                    'Reti_nol_mcg' => 2,
+                    'Vitami_na_A_RAE_mcg' => 2,
+                    'Tiami_na_mg' => 2,
+                    'Ribofla_vina_mg' => 2,
+                    'Niaci_na_mg' => 2,
+                    'Niaci_na_NE_mg' => 2,
+                    'Pirido_xina_mg' => 2,
+                    'Coba_lami_na_mcg' => 2,
+                    'Folato_DFE_mcg' => 2,
+                    'Vitami_na_D_mcg' => 5,
+                    'Vitami_na_E_mg' => 2,
+                    'Vitami_na_C_mg' => 2
+                ];
+
+                return app(FoodController::class)->fitnessCalc($osteoporose, $individuals);
 
             case 5:
+
+                $obesidade = [
+                    'Energia_kcal' => 5,
+                    'Proteina_g' => 1,
+                    'Lipidios_totais_g' => 4,
+                    'Carboi_drato_g' => 4,
+                    'Fibra_alimentar_total_g' => 1,
+                    'Coles_terol_mg' => 3,
+                    'AG_Satura_dos_g' => 4,
+                    'AG_Mono_g' => 2,
+                    'AG_Poli_g' => 2,
+                    'AG_Lino_leico_g' => 2,
+                    'AG_Linole_nico_g' => 2,
+                    'AG_Trans_total_g' => 4,
+                    'Acucar_total_g' => 5,
+                    'Acucar_de_adicacao_g' => 5,
+                    'Calcio_mg' => 1,
+                    'Mag_nesio_mg' => 1,
+                    'Man_ganes_mg' => 1,
+                    'Fosforo_mg' => 1,
+                    'Ferro_mg' => 1,
+                    'Sodio_mg' => 2,
+                    'Sodio_de_adicao_mg' => 2,
+                    'Potas_sio_mg' => 1,
+                    'Co_bre_mg' => 1,
+                    'Zinco_mg' => 1,
+                    'Sele_nio_mcg' => 1,
+                    'Reti_nol_mcg' => 1,
+                    'Vitami_na_A_RAE_mcg' => 1,
+                    'Tiami_na_mg' => 1,
+                    'Ribofla_vina_mg' => 1,
+                    'Niaci_na_mg' => 1,
+                    'Niaci_na_NE_mg' => 1,
+                    'Pirido_xina_mg' => 1,
+                    'Coba_lami_na_mcg' => 1,
+                    'Folato_DFE_mcg' => 1,
+                    'Vitami_na_D_mcg' => 1,
+                    'Vitami_na_E_mg' => 1,
+                    'Vitami_na_C_mg' => 1
+                ];
             
-            break;
+                return app(FoodController::class)->fitnessCalc($obesidade, $individuals);
 
             case 6:
+
+                $anemia = [
+                    'Energia_kcal' => 1,
+                    'Proteina_g' => 5,
+                    'Lipidios_totais_g' => 1,
+                    'Carboi_drato_g' => 1,
+                    'Fibra_alimentar_total_g' => 2,
+                    'Coles_terol_mg' => 1,
+                    'AG_Satura_dos_g' => 1,
+                    'AG_Mono_g' => 1,
+                    'AG_Poli_g' => 1,
+                    'AG_Lino_leico_g' => 1,
+                    'AG_Linole_nico_g' => 1,
+                    'AG_Trans_total_g' => 1,
+                    'Acucar_total_g' => 1,
+                    'Acucar_de_adicacao_g' => 1,
+                    'Calcio_mg' => 1,
+                    'Mag_nesio_mg' => 1,
+                    'Man_ganes_mg' => 1,
+                    'Fosforo_mg' => 1,
+                    'Ferro_mg' => 5,
+                    'Sodio_mg' => 1,
+                    'Sodio_de_adicao_mg' => 1,
+                    'Potas_sio_mg' => 1,
+                    'Co_bre_mg' => 1,
+                    'Zinco_mg' => 1,
+                    'Sele_nio_mcg' => 1,
+                    'Reti_nol_mcg' => 1,
+                    'Vitami_na_A_RAE_mcg' => 1,
+                    'Tiami_na_mg' => 1,
+                    'Ribofla_vina_mg' => 1,
+                    'Niaci_na_mg' => 1,
+                    'Niaci_na_NE_mg' => 1,
+                    'Pirido_xina_mg' => 1,
+                    'Coba_lami_na_mcg' => 5,
+                    'Folato_DFE_mcg' => 5,
+                    'Vitami_na_D_mcg' => 1,
+                    'Vitami_na_E_mg' => 1,
+                    'Vitami_na_C_mg' => 1
+                ];
             
-            break;
+                return app(FoodController::class)->fitnessCalc($anemia, $individuals);
 
             case 7:
             
-            break;
+                $disturbios_gastrointestinais = [
+                    'Energia_kcal' => 2,
+                    'Proteina_g' => 1,
+                    'Lipidios_totais_g' => 1,
+                    'Carboi_drato_g' => 2,
+                    'Fibra_alimentar_total_g' => 5,
+                    'Coles_terol_mg' => 1,
+                    'AG_Satura_dos_g' => 1,
+                    'AG_Mono_g' => 1,
+                    'AG_Poli_g' => 1,
+                    'AG_Lino_leico_g' => 1,
+                    'AG_Linole_nico_g' => 1,
+                    'AG_Trans_total_g' => 1,
+                    'Acucar_total_g' => 2,
+                    'Acucar_de_adicacao_g' => 2,
+                    'Calcio_mg' => 2,
+                    'Mag_nesio_mg' => 2,
+                    'Man_ganes_mg' => 2,
+                    'Fosforo_mg' => 2,
+                    'Ferro_mg' => 2,
+                    'Sodio_mg' => 1,
+                    'Sodio_de_adicao_mg' => 1,
+                    'Potas_sio_mg' => 2,
+                    'Co_bre_mg' => 2,
+                    'Zinco_mg' => 2,
+                    'Sele_nio_mcg' => 2,
+                    'Reti_nol_mcg' => 2,
+                    'Vitami_na_A_RAE_mcg' => 2,
+                    'Tiami_na_mg' => 2,
+                    'Ribofla_vina_mg' => 2,
+                    'Niaci_na_mg' => 2,
+                    'Niaci_na_NE_mg' => 2,
+                    'Pirido_xina_mg' => 2,
+                    'Coba_lami_na_mcg' => 2,
+                    'Folato_DFE_mcg' => 2,
+                    'Vitami_na_D_mcg' => 2,
+                    'Vitami_na_E_mg' => 2,
+                    'Vitami_na_C_mg' => 2
+                ];
 
+                return app(FoodController::class)->fitnessCalc($disturbios_gastrointestinais, $individuals);
         
         };
 
