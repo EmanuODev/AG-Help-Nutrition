@@ -2064,7 +2064,7 @@ class FoodController extends Controller
         return response()->json(['message' => 'Foods searched succefully', 'foods' => (Food::get()->toArray())], 200);
     }
 
-    public function algoritmoGenetico(){
+    public function algoritmoGenetico($sickness_type){
 
         $array_sort = Arr::shuffle(Food::get()->toArray());
         
@@ -2072,7 +2072,18 @@ class FoodController extends Controller
 
         $individuals = array_chunk($new_array, 5);
 
-        dd(["individuals" => $individuals]);
+        $data = new Collection([]);
+
+        foreach($individuals as $individual) {
+
+            $data->push([
+                "individual" => $individual,
+                "fitness" => app(FoodController::class)->fitness($sickness_type, $individual), 
+            ]);
+
+        }
+
+        dump($data->all());
 
     }
 

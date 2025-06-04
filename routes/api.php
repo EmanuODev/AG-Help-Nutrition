@@ -8,6 +8,7 @@ Route::prefix('v1')->group(function () {
  
     Route::post('/insert-data', [FoodController::class, 'initializeDatabase']);
     Route::get('/foods', [FoodController::class, 'getFoods']);
-    Route::get('/lucas-cachorro', [FoodController::class, 'algoritmoGenetico']);
+    Route::get('/lucas-cachorro/{sickness_type}', [FoodController::class, 'algoritmoGenetico']);
+    Route::get('/test/{sickness_type}', [FoodController::class, 'fitness']);
 
 });
