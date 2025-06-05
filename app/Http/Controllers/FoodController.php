@@ -2534,10 +2534,14 @@ class FoodController extends Controller
         $FoodController = new FoodController();
 
         $array_sort = Arr::shuffle(Food::get()->toArray());
-        
-        $new_array = Arr::take($array_sort, 100);
 
-        $individuals = array_chunk($new_array, 5);
+        $new_array = [];
+
+        for ($i = 0; $i < 1800; $i++) {
+            $new_array[] = $array_sort[array_rand($array_sort)];
+        }
+
+        $individuals = array_chunk($new_array, 15);
 
         $data = new Collection([]);
 
