@@ -1,0 +1,380 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Doenca;
+use App\Models\DoencaPeso;
+use Illuminate\Http\Request;
+
+class DoencaController extends Controller
+{
+    function InicializarDoenca() {
+
+        $doencas = [
+            ["nome" => "Diabetes", "url_image" => "diabetes.png"], 
+            ["nome" => "Colesterol alto", "url_image" => "colesterol.png"], 
+            ["nome" => "Hipertensão", "url_image" => "hipertensao.png"], 
+            ["nome" => "Osteoporose", "url_image" => "osteoporose.png"], 
+            ["nome" => "Anemia", "url_image" => "anemia.png"], 
+            ["nome" => "Obesidade", "url_image" => "obesidade.png"], 
+            ["nome" => "Doença cardiovascula", "url_image" => "cardiovascular.png"]
+        ];
+
+        foreach($doencas as $doenca) {
+
+            Doenca::create([
+                'nome' => $doenca["nome"],
+                'url_image' => $doenca["url_image"]
+            ]);
+
+        }
+
+        return response()->json(["message" => "Doenças criadas com sucesso"], 201);
+
+    }
+
+    function getAllDoencas(){
+
+        return response()->json(["doencas" => Doenca::select('id', 'nome', 'url_image')->get()->toArray(), "message" => "Doenças buscadas com sucesso"], 200);
+
+    }
+
+    function InicializarPesos() {
+
+        $pesos = [
+            [ // Diabetes
+
+                'Energia_kcal' => 3,
+                'Proteina_g' => 0,
+                'Lipidios_totais_g' => 2,
+                'Carboi_drato_g' => 5,
+                'Fibra_alimentar_total_g' => 0,
+                'Coles_terol_mg' => 0,
+                'AG_Satura_dos_g' => 2,
+                'AG_Mono_g' => 0,
+                'AG_Poli_g' => 0,
+                'AG_Lino_leico_g' => 0,
+                'AG_Linole_nico_g' => 0,
+                'AG_Trans_total_g' => 3,
+                'Acucar_total_g' => 5,
+                'Acucar_de_adicacao_g' => 5,
+                'Calcio_mg' => 0,
+                'Mag_nesio_mg' => 0,
+                'Man_ganes_mg' => 0,
+                'Fosforo_mg' => 0,
+                'Ferro_mg' => 0,
+                'Sodio_mg' => 2,
+                'Sodio_de_adicao_mg' => 2,
+                'Potas_sio_mg' => 0,
+                'Co_bre_mg' => 0,
+                'Zinco_mg' => 0,
+                'Sele_nio_mcg' => 0,
+                'Reti_nol_mcg' => 0,
+                'Vitami_na_A_RAE_mcg' => 0,
+                'Tiami_na_mg' => 0,
+                'Ribofla_vina_mg' => 0,
+                'Niaci_na_mg' => 0,
+                'Niaci_na_NE_mg' => 0,
+                'Pirido_xina_mg' => 0,
+                'Coba_lami_na_mcg' => 0,
+                'Folato_DFE_mcg' => 0,
+                'Vitami_na_D_mcg' => 0,
+                'Vitami_na_E_mg' => 0,
+                'Vitami_na_C_mg' => 0,
+            ],
+            [
+                'Energia_kcal' => 3,
+                'Proteina_g' => 2,
+                'Lipidios_totais_g' => 5,
+                'Carboi_drato_g' => 3,
+                'Fibra_alimentar_total_g' => 0,
+                'Coles_terol_mg' => 5,
+                'AG_Satura_dos_g' => 5,
+                'AG_Mono_g' => 2,
+                'AG_Poli_g' => 2,
+                'AG_Lino_leico_g' => 2,
+                'AG_Linole_nico_g' => 2,
+                'AG_Trans_total_g' => 5,
+                'Acucar_total_g' => 2,
+                'Acucar_de_adicacao_g' => 3,
+                'Calcio_mg' => 0,
+                'Mag_nesio_mg' => 0,
+                'Man_ganes_mg' => 0,
+                'Fosforo_mg' => 0,
+                'Ferro_mg' => 0,
+                'Sodio_mg' => 2,
+                'Sodio_de_adicao_mg' => 2,
+                'Potas_sio_mg' => 0,
+                'Co_bre_mg' => 0,
+                'Zinco_mg' => 0,
+                'Sele_nio_mcg' => 0,
+                'Reti_nol_mcg' => 0,
+                'Vitami_na_A_RAE_mcg' => 0,
+                'Tiami_na_mg' => 0,
+                'Ribofla_vina_mg' => 0,
+                'Niaci_na_mg' => 0,
+                'Niaci_na_NE_mg' => 0,
+                'Pirido_xina_mg' => 0,
+                'Coba_lami_na_mcg' => 0,
+                'Folato_DFE_mcg' => 0,
+                'Vitami_na_D_mcg' => 0,
+                'Vitami_na_E_mg' => 0,
+                'Vitami_na_C_mg' => 0
+            ],
+            [
+                'Energia_kcal' => 0,
+                'Proteina_g' => 0,
+                'Lipidios_totais_g' => 2,
+                'Carboi_drato_g' => 0,
+                'Fibra_alimentar_total_g' => 0,
+                'Coles_terol_mg' => 2,
+                'AG_Satura_dos_g' => 2,
+                'AG_Mono_g' => 0,
+                'AG_Poli_g' => 0,
+                'AG_Lino_leico_g' => 0,
+                'AG_Linole_nico_g' => 0,
+                'AG_Trans_total_g' => 2,
+                'Acucar_total_g' => 0,
+                'Acucar_de_adicacao_g' => 0,
+                'Calcio_mg' => 0,
+                'Mag_nesio_mg' => 0,
+                'Man_ganes_mg' => 0,
+                'Fosforo_mg' => 0,
+                'Ferro_mg' => 0,
+                'Sodio_mg' => 5,
+                'Sodio_de_adicao_mg' => 5,
+                'Potas_sio_mg' => 3,
+                'Co_bre_mg' => 0,
+                'Zinco_mg' => 0,
+                'Sele_nio_mcg' => 0,
+                'Reti_nol_mcg' => 0,
+                'Vitami_na_A_RAE_mcg' => 0,
+                'Tiami_na_mg' => 0,
+                'Ribofla_vina_mg' => 0,
+                'Niaci_na_mg' => 0,
+                'Niaci_na_NE_mg' => 0,
+                'Pirido_xina_mg' => 0,
+                'Coba_lami_na_mcg' => 0,
+                'Folato_DFE_mcg' => 0,
+                'Vitami_na_D_mcg' => 0,
+                'Vitami_na_E_mg' => 0,
+                'Vitami_na_C_mg' => 0,
+            ],
+            [
+                'Energia_kcal' => 0,
+                'Proteina_g' => 2,
+                'Lipidios_totais_g' => 0,
+                'Carboi_drato_g' => 0,
+                'Fibra_alimentar_total_g' => 0,
+                'Coles_terol_mg' => 0,
+                'AG_Satura_dos_g' => 0,
+                'AG_Mono_g' => 0,
+                'AG_Poli_g' => 0,
+                'AG_Lino_leico_g' => 0,
+                'AG_Linole_nico_g' => 0,
+                'AG_Trans_total_g' => 0,
+                'Acucar_total_g' => 0,
+                'Acucar_de_adicacao_g' => 0,
+                'Calcio_mg' => 5,
+                'Mag_nesio_mg' => 2,
+                'Man_ganes_mg' => 2,
+                'Fosforo_mg' => 4,
+                'Ferro_mg' => 2,
+                'Sodio_mg' => 0,
+                'Sodio_de_adicao_mg' => 0,
+                'Potas_sio_mg' => 2,
+                'Co_bre_mg' => 2,
+                'Zinco_mg' => 2,
+                'Sele_nio_mcg' => 2,
+                'Reti_nol_mcg' => 2,
+                'Vitami_na_A_RAE_mcg' => 2,
+                'Tiami_na_mg' => 2,
+                'Ribofla_vina_mg' => 2,
+                'Niaci_na_mg' => 2,
+                'Niaci_na_NE_mg' => 2,
+                'Pirido_xina_mg' => 2,
+                'Coba_lami_na_mcg' => 2,
+                'Folato_DFE_mcg' => 2,
+                'Vitami_na_D_mcg' => 5,
+                'Vitami_na_E_mg' => 2,
+                'Vitami_na_C_mg' => 2
+            ],
+            [
+                'Energia_kcal' => 5,
+                'Proteina_g' => 0,
+                'Lipidios_totais_g' => 4,
+                'Carboi_drato_g' => 4,
+                'Fibra_alimentar_total_g' => 0,
+                'Coles_terol_mg' => 3,
+                'AG_Satura_dos_g' => 4,
+                'AG_Mono_g' => 2,
+                'AG_Poli_g' => 2,
+                'AG_Lino_leico_g' => 2,
+                'AG_Linole_nico_g' => 2,
+                'AG_Trans_total_g' => 4,
+                'Acucar_total_g' => 5,
+                'Acucar_de_adicacao_g' => 5,
+                'Calcio_mg' => 0,
+                'Mag_nesio_mg' => 0,
+                'Man_ganes_mg' => 0,
+                'Fosforo_mg' => 0,
+                'Ferro_mg' => 0,
+                'Sodio_mg' => 2,
+                'Sodio_de_adicao_mg' => 2,
+                'Potas_sio_mg' => 0,
+                'Co_bre_mg' => 0,
+                'Zinco_mg' => 0,
+                'Sele_nio_mcg' => 0,
+                'Reti_nol_mcg' => 0,
+                'Vitami_na_A_RAE_mcg' => 0,
+                'Tiami_na_mg' => 0,
+                'Ribofla_vina_mg' => 0,
+                'Niaci_na_mg' => 0,
+                'Niaci_na_NE_mg' => 0,
+                'Pirido_xina_mg' => 0,
+                'Coba_lami_na_mcg' => 0,
+                'Folato_DFE_mcg' => 0,
+                'Vitami_na_D_mcg' => 0,
+                'Vitami_na_E_mg' => 0,
+                'Vitami_na_C_mg' => 0
+            ],
+            [
+                'Energia_kcal' => 0,
+                'Proteina_g' => 5,
+                'Lipidios_totais_g' => 0,
+                'Carboi_drato_g' => 0,
+                'Fibra_alimentar_total_g' => 2,
+                'Coles_terol_mg' => 0,
+                'AG_Satura_dos_g' => 0,
+                'AG_Mono_g' => 0,
+                'AG_Poli_g' => 0,
+                'AG_Lino_leico_g' => 0,
+                'AG_Linole_nico_g' => 0,
+                'AG_Trans_total_g' => 0,
+                'Acucar_total_g' => 0,
+                'Acucar_de_adicacao_g' => 0,
+                'Calcio_mg' => 0,
+                'Mag_nesio_mg' => 0,
+                'Man_ganes_mg' => 0,
+                'Fosforo_mg' => 0,
+                'Ferro_mg' => 5,
+                'Sodio_mg' => 0,
+                'Sodio_de_adicao_mg' => 0,
+                'Potas_sio_mg' => 0,
+                'Co_bre_mg' => 0,
+                'Zinco_mg' => 0,
+                'Sele_nio_mcg' => 0,
+                'Reti_nol_mcg' => 0,
+                'Vitami_na_A_RAE_mcg' => 0,
+                'Tiami_na_mg' => 0,
+                'Ribofla_vina_mg' => 0,
+                'Niaci_na_mg' => 0,
+                'Niaci_na_NE_mg' => 0,
+                'Pirido_xina_mg' => 0,
+                'Coba_lami_na_mcg' => 5,
+                'Folato_DFE_mcg' => 5,
+                'Vitami_na_D_mcg' => 0,
+                'Vitami_na_E_mg' => 0,
+                'Vitami_na_C_mg' => 0
+            ],
+            [
+                'Energia_kcal' => 2,
+                'Proteina_g' => 0,
+                'Lipidios_totais_g' => 0,
+                'Carboi_drato_g' => 2,
+                'Fibra_alimentar_total_g' => 5,
+                'Coles_terol_mg' => 0,
+                'AG_Satura_dos_g' => 0,
+                'AG_Mono_g' => 0,
+                'AG_Poli_g' => 0,
+                'AG_Lino_leico_g' => 0,
+                'AG_Linole_nico_g' => 0,
+                'AG_Trans_total_g' => 0,
+                'Acucar_total_g' => 2,
+                'Acucar_de_adicacao_g' => 2,
+                'Calcio_mg' => 2,
+                'Mag_nesio_mg' => 2,
+                'Man_ganes_mg' => 2,
+                'Fosforo_mg' => 2,
+                'Ferro_mg' => 2,
+                'Sodio_mg' => 0,
+                'Sodio_de_adicao_mg' => 0,
+                'Potas_sio_mg' => 2,
+                'Co_bre_mg' => 2,
+                'Zinco_mg' => 2,
+                'Sele_nio_mcg' => 2,
+                'Reti_nol_mcg' => 2,
+                'Vitami_na_A_RAE_mcg' => 2,
+                'Tiami_na_mg' => 2,
+                'Ribofla_vina_mg' => 2,
+                'Niaci_na_mg' => 2,
+                'Niaci_na_NE_mg' => 2,
+                'Pirido_xina_mg' => 2,
+                'Coba_lami_na_mcg' => 2,
+                'Folato_DFE_mcg' => 2,
+                'Vitami_na_D_mcg' => 2,
+                'Vitami_na_E_mg' => 2,
+                'Vitami_na_C_mg' => 2
+            ]
+
+        ];
+
+        $count = 1;
+
+        foreach($pesos as $peso) {
+
+            DoencaPeso::create([
+                'doenca_id' => $count,
+                'Energia_kcal' => $peso['Energia_kcal'],
+                'Proteina_g' => $peso['Proteina_g'],
+                'Lipidios_totais_g' => $peso['Lipidios_totais_g'],
+                'Carboi_drato_g' => $peso['Carboi_drato_g'],
+                'Fibra_alimentar_total_g' => $peso['Fibra_alimentar_total_g'],
+                'Coles_terol_mg' => $peso['Coles_terol_mg'],
+                'AG_Satura_dos_g' => $peso['AG_Satura_dos_g'],
+                'AG_Mono_g' => $peso['AG_Mono_g'],
+                'AG_Poli_g' => $peso['AG_Poli_g'],
+                'AG_Lino_leico_g' => $peso['AG_Lino_leico_g'],
+                'AG_Linole_nico_g' => $peso['AG_Linole_nico_g'],
+                'AG_Trans_total_g' => $peso['AG_Trans_total_g'],
+                'Acucar_total_g' => $peso['Acucar_total_g'],
+                'Acucar_de_adicacao_g' => $peso['Acucar_de_adicacao_g'],
+                'Calcio_mg' => $peso['Calcio_mg'],
+                'Mag_nesio_mg' => $peso['Mag_nesio_mg'],
+                'Man_ganes_mg' => $peso['Man_ganes_mg'],
+                'Fosforo_mg' => $peso['Fosforo_mg'],
+                'Ferro_mg' => $peso['Ferro_mg'],
+                'Sodio_mg' => $peso['Sodio_mg'],
+                'Sodio_de_adicao_mg' => $peso['Sodio_de_adicao_mg'],
+                'Potas_sio_mg' => $peso['Potas_sio_mg'],
+                'Co_bre_mg' => $peso['Co_bre_mg'],
+                'Zinco_mg' => $peso['Zinco_mg'],
+                'Sele_nio_mcg' => $peso['Sele_nio_mcg'],
+                'Reti_nol_mcg' => $peso['Reti_nol_mcg'],
+                'Vitami_na_A_RAE_mcg' => $peso['Vitami_na_A_RAE_mcg'],
+                'Tiami_na_mg' => $peso['Tiami_na_mg'],
+                'Ribofla_vina_mg' => $peso['Ribofla_vina_mg'],
+                'Niaci_na_mg' => $peso['Niaci_na_mg'],
+                'Niaci_na_NE_mg' => $peso['Niaci_na_NE_mg'],
+                'Pirido_xina_mg' => $peso['Pirido_xina_mg'],
+                'Coba_lami_na_mcg' => $peso['Coba_lami_na_mcg'],
+                'Folato_DFE_mcg' => $peso['Folato_DFE_mcg'],
+                'Vitami_na_D_mcg' => $peso['Vitami_na_D_mcg'],
+                'Vitami_na_E_mg' => $peso['Vitami_na_E_mg'],
+                'Vitami_na_C_mg' => $peso['Vitami_na_C_mg'],
+            ]);
+
+            $count++;
+
+        }
+
+        return response()->json(["message" => "Pesos criadas com sucesso"], 201);
+
+    }
+
+    function getPeso($doenca_id){
+        
+        return (DoencaPeso::where('doenca_id', '=', $doenca_id)->get()->toArray())[0];
+
+    }
+}
