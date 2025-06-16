@@ -158,7 +158,7 @@ class SubstitutionFoodsController extends Controller
     }
 
     
-    // Função auxiliar para recomendar um alimento (Incompleto - Indefinido)
+    // Função auxiliar para recomendar um alimento
     public function recomendedFoods($subst){
         
         $recomended = [
@@ -169,20 +169,18 @@ class SubstitutionFoodsController extends Controller
             'Bebida ou Laticínio' => [],
             'Macronutrientes' => []
         ];
-
-        $arr_sorted = Food::get()->toArray();
-        $sorted = $arr_sorted[array_rand($arr_sorted)];
-        $grupoSorted = $this->mapCategoriaGrupo($sorted[2]);
-        $newSubMacro = $this->calculateMealSummary($sorted);
         
-        foreach($subst as $subCategory => $sub){
+        foreach($subst as $subCategory => $subFood){
             
-            $subMacro = $this->calculateMealSummary($sub);
+            $subMacro = $this->calculateMealSummary($subFood);
+            $foodsCategory = Food::where('category', $subCategory)->get()->toArray();
             
-            while(!$this->isValidRecomended($subMacro, $newSubMacro)){
-                $sorted = $arr_sorted[array_rand($arr_sorted)];
+            $tentativa = 0;
+            do{
+                $sorted = $foodsCategory[array_rand($foodsCategory)];
                 $newSubMacro = $this->calculateMealSummary($sorted);
-            }
+                $tentativa++;
+            }while(!$this->isValidRecomended($subMacro, $newSubMacro) && $tentativa < 100);
 
             $recomended[$subCategory] = $sorted;
         }
