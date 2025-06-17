@@ -8,6 +8,7 @@ import { Tabela } from "../components/tabela";
 import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
 import { ProxAntFase } from "../components/prox_ant_fase";
+import { Fase3 } from "../components/fase3";
 
 
 type DoencasProps = {
@@ -139,6 +140,12 @@ export function Home(){
                         <Tabela todos_alimentos={todos_alimentos} alimentos={alimentos} setAlimentos={setAlimentos}></Tabela>
                         <ProxAntFase setFase={setFase} numFase={3}><GoArrowRight className="text-white"/></ProxAntFase>
                         
+                    </div>
+                }
+                {fase === 3 &&
+
+                    <div className="w-full flex justify-center">
+                        <Fase3 alimentos={alimentos}></Fase3>
                     </div>
                 }
             </main>
