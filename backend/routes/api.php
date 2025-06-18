@@ -17,6 +17,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/test/{sickness_type}', [FoodController::class, 'fitness']);
         Route::post('/substituicao-refeicao', [SubstitutionFoodsController::class, 'substituteFoods']);
         Route::get('/foods-recomended/{sickness_type}', [RemoteSubstController::class, 'retornarComidasPossiveis']);
+        Route::post('/recomendar-refeicao', [SubstitutionFoodsController::class, 'groupInMeal']);
 
     });
     

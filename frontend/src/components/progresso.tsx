@@ -1,17 +1,27 @@
+import type { ComponentProps } from "react";
 import { Circulo } from "./circulo";
 import { Linha } from "./linha";
 
-export function Progresso () {
+interface ProgressoProps extends ComponentProps<'ul'> {
+    
+    info: {
+        bolinha: boolean[],
+        barrinha: boolean[]
+    }
+
+}
+
+export function Progresso ( props: ProgressoProps ) {
     
     return (
         <ul className="flex items-center gap-x-3">
-            <Circulo>1</Circulo>
-            <Linha></Linha>
-            <Circulo>2</Circulo>
-            <Linha></Linha>
-            <Circulo>3</Circulo>
-            <Linha></Linha>
-            <Circulo>4</Circulo>
+            <Circulo status={props.info.bolinha[0]}>1</Circulo>
+            <Linha status={props.info.barrinha[0]}></Linha>
+            <Circulo status={props.info.bolinha[1]}>2</Circulo>
+            <Linha status={props.info.barrinha[1]}></Linha>
+            <Circulo status={props.info.bolinha[2]}>3</Circulo>
+            <Linha status={props.info.barrinha[2]}></Linha>
+            <Circulo status={props.info.bolinha[3]}>4</Circulo>
         </ul>
     )
 }
