@@ -9,7 +9,20 @@ import { GoArrowRight } from "react-icons/go";
 import { GoArrowLeft } from "react-icons/go";
 import { ProxAntFase } from "../components/prox_ant_fase";
 import { Fase3 } from "../components/fase3";
+import { Fase4 } from "../components/fase4";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
+type MacronutrientesProps = {
+
+    "Energia_kcal": number,
+    "Carboi_drato_g": number,
+    "Proteina_g": number,
+    "Gorduras_Saturadas": number,
+    "Gorduras_Trans": number,
+    "Gorduras_Totais": number,
+    "Acucar_total_g": number
+
+}
 
 type DoencasProps = {
 
@@ -74,6 +87,21 @@ export function Home(){
     const [doencas, setDoencas] = useState<DoencasProps[]>([])
     const [alimentos, setAlimentos] = useState<AlimentoProps[]>([])
     const [todos_alimentos, setTodosAlimentos] = useState<AlimentoProps[]>([])
+    const [refeicao, setRefeicao] = useState<AlimentoProps[]>([])
+    const [macronutrientes, setMacronutrientes] = useState<MacronutrientesProps>({
+        "Energia_kcal": 0,
+		"Carboi_drato_g": 0,
+		"Proteina_g": 0,
+		"Gorduras_Saturadas": 0,
+		"Gorduras_Trans": 0,
+		"Gorduras_Totais": 0,
+		"Acucar_total_g": 0,
+    })
+
+    const [status_fases, setStatusFases] = useState({
+        bolinha: [true, false, false, false],
+        barrinha: [false, false, false]
+    })
 
     const [fase, setFase] = useState(1)
 
@@ -113,12 +141,88 @@ export function Home(){
 
     }, [])
 
+    useEffect(() => {
+
+        if (fase === 1) {
+
+            setStatusFases({
+                bolinha: [true, false, false, false],
+                barrinha: [false, false, false]
+            })
+            
+        }
+
+        if (fase === 2) {
+
+            setStatusFases({
+                bolinha: [true, true, false, false],
+                barrinha: [true, false, false]
+            })
+
+            toast.success("Doença escolhida com sucesso", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            
+        }
+
+        if (fase === 3) {
+
+            setStatusFases({
+                bolinha: [true, true, true, false],
+                barrinha: [true, true, false]
+            })
+
+            toast.success("Recomendação de Alimentos", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            
+        }
+
+        if (fase === 4) {
+
+            setStatusFases({
+                bolinha: [true, true, true, true],
+                barrinha: [true, true, true]
+            })
+
+            toast.success("Refeição sugerida com sucesso (temporária)", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            
+        }
+            
+    }, [fase])
+
     return (
         <div className="min-h-screen flex flex-col bg-[#F1F8E9]">
             <Header></Header>
             <main className="h-full w-full flex flex-1 flex-col pt-12 items-center gap-12">
-                <Progresso></Progresso>
-                {fase === 1 &&
+                <Progresso info={status_fases}></Progresso>
+                {fase === 1 && 
                     <ul className="w-full grid grid-cols-4 justify-items-center gap-y-20 px-52 pt-12">
                         {doencas.map((doenca, index) =>
                             <motion.li initial={ {opacity: 0, scale: 0} } whileInView={ {opacity: 1, scale: 1} } whileHover={ {scale: 1.1} } key={doenca.id}>
@@ -130,6 +234,7 @@ export function Home(){
                                     nome={doenca.nome}/>
                             </motion.li>
                         )}
+
                     </ul>
                 }
                 {fase === 2 &&
@@ -145,10 +250,19 @@ export function Home(){
                 {fase === 3 &&
 
                     <div className="w-full flex justify-center">
-                        <Fase3 alimentos={alimentos}></Fase3>
+                        <Fase3 alimentos={alimentos} setRefeicao={setRefeicao} setMacronutrientes={setMacronutrientes} setFase={setFase}></Fase3>
                     </div>
                 }
+
+                {fase === 4 &&
+
+                    <div className="w-full flex justify-center">
+                        <Fase4 refeicao={refeicao} macronutrientes={macronutrientes}></Fase4>
+                    </div>
+                }
+
             </main>
+            <ToastContainer />
         </div>
     )
 }

@@ -15,6 +15,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/lucas-cachorro/{sickness_type}', [FoodController::class, 'algoritmoGenetico']);
         Route::get('/test/{sickness_type}', [FoodController::class, 'fitness']);
         Route::post('/substituicao-refeicao', [SubstitutionFoodsController::class, 'substituteFoods']);
+        Route::post('/recomendar-refeicao', [SubstitutionFoodsController::class, 'groupInMeal']);
 
     });
     

@@ -1,8 +1,11 @@
-import { useState, type ComponentProps } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { THRefeicao } from "./th_refeicao";
 import { TDRefeicao } from "./td_refeicao";
 import { BsInfoSquareFill } from "react-icons/bs";
 import { DetalhesAlimentos } from "./detalhes_alimento";
+import { api } from "../api";
+import { twMerge } from "tailwind-merge";
+import { FaCheck } from "react-icons/fa6";
 
 type AlimentoProps = {
 
@@ -54,43 +57,117 @@ type AlimentoProps = {
 
 }
 
+type MacronutrientesProps = {
+
+    "Energia_kcal": number,
+    "Carboi_drato_g": number,
+    "Proteina_g": number,
+    "Gorduras_Saturadas": number,
+    "Gorduras_Trans": number,
+    "Gorduras_Totais": number,
+    "Acucar_total_g": number
+
+}
+
 interface Fase3Props extends ComponentProps<'div'> {
 
-    alimentos: AlimentoProps[] 
+    alimentos: AlimentoProps[],
+    setRefeicao: Function,
+    setMacronutrientes: Function,
+    setFase: Function
 
 }
 
 export function Fase3( props: Fase3Props ){
-
-    const [refeicao, setRefeicao] = useState<AlimentoProps[]>([props.alimentos[0], props.alimentos[1], props.alimentos[2], props.alimentos[3], props.alimentos[4]])
+    
+    const [refeicao, setRefeicao] = useState<AlimentoProps[]>([])
+    const [checked, setChecked] = useState<boolean[]>([false, false, false, false, false])
     const [index, setIndex] = useState(0)
+    const [macronutrientes, setMacronutrientes] = useState<MacronutrientesProps>()
 
     const [modal, setModal] = useState(false)
+
+    function alterarCheck( index: number ) {
+
+        setChecked(checked.map((check, i) => 
+            i === index ? !check : check
+        ))
+
+    }
+
+    function substituir () {
+
+        var mealSubstitutes: AlimentoProps[] = [];
+
+        mealSubstitutes = refeicao.filter((_, index) => checked[index])
+
+        var request = {
+            "refeicao": refeicao,
+            "mealSubstitutes": mealSubstitutes
+        }
+
+        api.post('/food/substituicao-refeicao', request)
+        .then(function (response) {
+            props.setRefeicao(response.data.refeicao)
+            props.setMacronutrientes(response.data.macronutrientes)
+            props.setFase(4)
+        })
+        .catch(function (error) {
+            console.error(error)
+        })
+    }
+
+    useEffect(() => {
+
+        const carregarRefeicao = () => {
+
+            api.post("/food/recomendar-refeicao", { cromossomoFoods: props.alimentos})
+            .then(function (response) {
+                setRefeicao(response.data.refeicao);
+                setMacronutrientes(response.data.macronutrientes);
+            })
+            .catch(function (error) {
+                console.error(error);
+            })
+
+        }
+
+        carregarRefeicao();
+
+    }, [])
     
     return (
 
         <div className="">
 
-            <h1 className="mb-16">Refeição Recomendada:</h1>
+            <div className="w-full flex items-center justify-between mb-12">
 
-            <table className="w-[100rem] rounded-lg overflow-hidden">
+                <h1 className="">Refeição Recomendada:</h1>
+
+                <button onClick={() => substituir()} className="py-4 px-10 bg-green-500 text-white cursor-pointer">Substituir</button>
+
+            </div>
+
+
+            <table className="w-[100rem] rounded-lg overflow-hidden table-fixed">
                 
                 <thead className="">
 
                     <tr>
                         <THRefeicao className="w-[5%]">Nº</THRefeicao>
-                        <THRefeicao className="w-[27%]">Nome</THRefeicao>
-                        <THRefeicao className="w-[28%]">Categoria</THRefeicao>
+                        <THRefeicao className="w-[24%]">Nome</THRefeicao>
+                        <THRefeicao className="w-[27%]">Categoria</THRefeicao>
                         <THRefeicao className="w-[20%]">Preparo</THRefeicao>
                         <THRefeicao className="w-[10%]">Calorias</THRefeicao>
-                        <THRefeicao className="w-[10%] text-center pl-0">Ver mais</THRefeicao>
+                        <THRefeicao className="w-[7%] text-center pl-0">Ver mais</THRefeicao>
+                        <THRefeicao className="w-[7%] text-center pl-0">Substituir?</THRefeicao>
                     </tr>
 
                 </thead>
 
                 <tbody className="divide-y divide-gray-300">
 
-                    {refeicao.map((alimento, index) =>
+                    {refeicao.slice(0, 5).map((alimento, index) =>
                         <tr key={alimento.id} className="">
                             <TDRefeicao>{index + 1}</TDRefeicao>
                             <TDRefeicao>{alimento.descricacao_do_alimento}</TDRefeicao>
@@ -98,6 +175,12 @@ export function Fase3( props: Fase3Props ){
                             <TDRefeicao>{alimento.descricao_da_preparacao}</TDRefeicao>
                             <TDRefeicao>{alimento.Energia_kcal.toFixed(2).replace('.', ',')}</TDRefeicao>
                             <TDRefeicao className="text-center h-full w-full pl-0"><button onClick={() => {setModal(true); setIndex(index)}} className="h-full w-full flex justify-center items-center cursor-pointer"><BsInfoSquareFill className="text-[#42A5F5] text-3xl"/></button></TDRefeicao>
+                            <TDRefeicao className="text-center h-full w-full pl-0">
+                                <label htmlFor={`checkbox${index}`} className="w-full flex items-center justify-center">
+                                    <input name={`checkbox${index}`} id={`checkbox${index}`} onChange={() => alterarCheck(index)} checked={checked[index]} type="checkbox" className="hidden"></input>
+                                    <div className={twMerge("w-6 h-6 border border-slate-300 rounded-md flex items-center justify-center cursor-pointer", checked[index] ? "bg-[#42A5F5]" : "bg-white")}>{checked[index] && <FaCheck className="text-white"/>}</div>
+                                </label>
+                            </TDRefeicao>
                         </tr>
                     )}
 

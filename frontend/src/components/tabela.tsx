@@ -68,6 +68,8 @@ export function Tabela ( props: TabelaProps ) {
 
     const [index, setIndex] = useState(0)
 
+    console.log(props.alimentos);
+
     return (
         
         <div className="w-[100rem] h-[44rem] overflow-scroll">

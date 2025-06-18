@@ -111,11 +111,14 @@ export function Modal ( props: ModalProps ) {
                     <h1 className="text-[2.4rem] font-Outfit font-bold text-gray-800">Substituir Alimento</h1>
                     <button onClick={() => {props.setModal(false)}} className="bg-red-700 text-white p-3 rounded-lg cursor-pointer text-2xl"><IoClose /></button>
                 </div>
-                <div className="w-full flex items-center justify-between divide-x border bg-slate-500 text-white shadow-md py-3">
-                    <h1 className="w-[15%] text-center px-2">{props.index_alimento + 1}</h1>
-                    <h1 className="w-[35%] text-center px-2">{alimento.descricacao_do_alimento}</h1>
-                    <h1 className="w-[25%] text-center px-2">{alimento.Categoria}</h1>
-                    <h1 className="w-[25%] text-center px-2">{alimento.descricao_da_preparacao}</h1>
+                <div className="flex flex-col gap-2">
+                    <h1 className="font-Outfit text-[1.1rem]">Selecionado:</h1>
+                    <div className="w-full flex items-center justify-between divide-x border bg-slate-500 text-white shadow-md py-3">
+                        <h1 className="w-[15%] text-center px-2">{props.index_alimento + 1}</h1>
+                        <h1 className="w-[35%] text-center px-2">{alimento.descricacao_do_alimento}</h1>
+                        <h1 className="w-[25%] text-center px-2">{alimento.Categoria}</h1>
+                        <h1 className="w-[25%] text-center px-2">{alimento.descricao_da_preparacao}</h1>
+                    </div>
                 </div>
                 <label htmlFor="search" className="">
                     <h1 className="mb-3 ">Selecione o novo alimento</h1>

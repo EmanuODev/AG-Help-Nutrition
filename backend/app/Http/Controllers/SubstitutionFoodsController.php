@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Food;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class SubstitutionFoodsController extends Controller
 {
@@ -60,6 +61,7 @@ class SubstitutionFoodsController extends Controller
      * Calcula somatório nutricional da refeição.
      */
     public function calculateMealSummary(array $meal){
+        
         $summary = [
             'Energia_kcal' => 0.0,
             'Carboi_drato_g' => 0.0,
@@ -89,8 +91,12 @@ class SubstitutionFoodsController extends Controller
     * Função para montar 1 refeição com: Carboidrato, Proteína, Salada, Fruta ou Doce, Bebida ou Laticínio
     */
 
-    public function groupInMeal($cromossomoFoods){
+    public function groupInMeal(Request $request){
         
+        $cromossomoFoods = $request->cromossomoFoods;
+
+        //dd($cromossomoFoods);
+
         $grupos = [
             'Carboidrato' => [],
             'Proteína' => [],
@@ -100,89 +106,78 @@ class SubstitutionFoodsController extends Controller
         ];
 
         foreach($cromossomoFoods as $food){
-            $grupo = $this->mapCategoriaGrupo($food[3]);
+            $grupo = $this->mapCategoriaGrupo($food["Categoria"]);
 
             $grupos[$grupo][] = $food;
         }
 
-        $refeicao = [
-            'Carboidrato' => [],
-            'Proteína' => [],
-            'Salada' => [],
-            'Fruta ou Doce' => [],
-            'Bebida ou Laticínio' => [],
-            'Macronutrientes' => []
-        ];
+        $new_refeicao = [];
 
         foreach($grupos as $grupo => $foodItem){
-            $escolha = $foodItem[array_rand($foodItem)];
 
-            $refeicao[$grupo] = [
-                'Comida' => $escolha,
-                'Macronutrientes' => $this->calculateMealSummary($escolha)
-            ];
+            if (count($foodItem) > 0 ) {
+
+                $escolha = $foodItem[array_rand($foodItem)];
+    
+                $new_refeicao[] = $escolha;
+
+            }
+
         }
 
-        $refeicao['Macronutrientes'] = $this->calculateMealSummary($this->returnComponentsMeal($refeicao));
+        return response()->json(["refeicao" => $new_refeicao, "macronutrientes" => $this->calculateMealSummary($new_refeicao)], 200);
 
-        return $refeicao;
-    }
-
-    public function returnComponentsMeal($meal){
-        $foods = [];
-
-        foreach($meal as $categoria => $food){
-            $foods[] = $food['Comida'];
-        }
-
-        return $foods;
     }
 
     /**
      * Função que define 1 ou mais substituições de alimentos em uma refeição
      */
 
-    public function substituteFoods($mealSubstitutes, $refeicao){
+    public function substituteFoods(Request $request){
+
+        $mealSubstitutes = $request->mealSubstitutes;
+        $refeicao = $request->refeicao;
+        $count = 0;
 
         $recomended = $this->recomendedFoods($mealSubstitutes);
 
-        foreach($recomended as $grupo => $value){
-            if($value){
-                $refeicao[$grupo] = $recomended[$grupo];
-            }
+        $refeicao_final = [];
+
+        foreach($refeicao as $food){
+
+            if(in_array($food, $mealSubstitutes)) 
+                $refeicao_final[] = $recomended[$count++];
+
+            else
+                $refeicao_final[] = $food;
+
         }
 
-        $refeicao['Macronutrientes'] = $this->calculateMealSummary($this->returnComponentsMeal($refeicao));
+        return response()->json(["refeicao" => $refeicao_final , "macronutrientes" => $this->calculateMealSummary($refeicao_final)], 200);
 
-        return $refeicao;
     }
 
     
     // Função auxiliar para recomendar um alimento
     public function recomendedFoods($subst){
         
-        $recomended = [
-            'Carboidrato' => [],
-            'Proteína' => [],
-            'Salada' => [],
-            'Fruta ou Doce' => [],
-            'Bebida ou Laticínio' => [],
-            'Macronutrientes' => []
-        ];
-        
-        foreach($subst as $subCategory => $subFood){
+        $recomended = [];
+
+        $subMacro = $this->calculateMealSummary($subst);
+
+        foreach($subst as $subFood){
             
-            $subMacro = $this->calculateMealSummary($subFood);
-            $foodsCategory = Food::where('category', $subCategory)->get()->toArray();
+            $foodsCategory = Food::where('Categoria', "LIKE", $subFood["Categoria"])->get()->toArray();
             
             $tentativa = 0;
             do{
                 $sorted = $foodsCategory[array_rand($foodsCategory)];
-                $newSubMacro = $this->calculateMealSummary($sorted);
+                $sorted_array = [$sorted];
+                $newSubMacro = $this->calculateMealSummary($sorted_array);
                 $tentativa++;
             }while(!$this->isValidRecomended($subMacro, $newSubMacro) && $tentativa < 100);
 
-            $recomended[$subCategory] = $sorted;
+            $recomended[] = $sorted;
         }
 
         return $recomended;
