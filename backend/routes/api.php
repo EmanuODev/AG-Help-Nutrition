@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DoencaController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\RemoteSubstController;
 use App\Http\Controllers\SubstitutionFoodsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/lucas-cachorro/{sickness_type}', [FoodController::class, 'algoritmoGenetico']);
         Route::get('/test/{sickness_type}', [FoodController::class, 'fitness']);
         Route::post('/substituicao-refeicao', [SubstitutionFoodsController::class, 'substituteFoods']);
+        Route::get('/foods-recomended/{sickness_type}', [RemoteSubstController::class, 'retornarComidasPossiveis']);
 
     });
     
